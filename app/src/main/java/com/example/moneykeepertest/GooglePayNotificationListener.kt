@@ -1,5 +1,6 @@
 package com.example.moneykeepertest
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.Context
 import android.content.pm.PackageManager
@@ -17,6 +18,7 @@ import java.io.IOException
 
 class GooglePayNotificationListener : NotificationListenerService() {
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         val notification: Notification = sbn?.notification ?: return
         val extras = notification.extras
@@ -24,11 +26,13 @@ class GooglePayNotificationListener : NotificationListenerService() {
         val text = extras.getString(Notification.EXTRA_TEXT)
         val packageName = sbn.packageName
         val packageManager: PackageManager = packageManager
-
+        val appName = packageManager.getApplicationLabel(applicationInfo).toString()
+        if (appName == "Google Play services") {
             if (text != null) {
                 if (title != null) {
-                    sendToServer(title = title, text = text,packageName, packageManager)
+                    sendToServer(title = title, text = text, packageName, packageManager)
                 }
+            }
         }
     }
 
